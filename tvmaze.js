@@ -22,18 +22,37 @@ async function getShowsByTerm(term) {
   const response = await fetch(`${TV_MAZE_URL}/search/shows?${searchTerm}`);
   const showsArr = await response.json();
 
-  for (let showObj of showsArr) {
+  // TODO: can use .map for this
+  showsArr.map((showObj) => {
     const show = showObj.show;
-
     searchedShowsArr.push({
       id: show.id,
       name: show.name,
       summary: show.summary,
-      image: show.image.medium,
+      image: show.image === null ? "https://tinyurl.com/tv-missing" : show.image.original
     });
-  }
+  });
+
   return searchedShowsArr;
+  // Commenting out to test the .map implementation
+  // for (let showObj of showsArr) {
+  //   const show = showObj.show;
+  //   // Standard if conditional check, removing to test ternary
+  //   // if (show.image === null) {
+  //   //   show.image = "https://tinyurl.com/tv-missing";
+  //   // } else {
+  //   //   show.image = show.image.medium;
+  //   // }
+
+  //   searchedShowsArr.push({
+  //     id: show.id,
+  //     name: show.name,
+  //     summary: show.summary,
+  //     // image: show.image,
+  //     image: show.image === null ? "https://tinyurl.com/tv-missing" : show.image.original
+  //   });
 }
+// }
 
 // Commenting hardcoded default out
 // return [
@@ -70,8 +89,8 @@ function displayShows(shows) {
         <div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img
-              src="http://static.tvmaze.com/uploads/images/medium_portrait/160/401704.jpg"
-              alt="Bletchly Circle San Francisco"
+              src=${show.image}
+              alt=${show.name}
               class="w-25 me-3">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
