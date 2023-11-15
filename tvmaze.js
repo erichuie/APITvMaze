@@ -4,7 +4,8 @@ const $showsList = $("#showsList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
 const TV_MAZE_URL = "http://api.tvmaze.com";
-
+// TODO: CONSTANT - no image url
+const MISSING_IMAGE_LINK = "https://tinyurl.com/tv-missing";
 
 /** Given a search term, search for tv shows that match that query.
  *
@@ -15,65 +16,25 @@ const TV_MAZE_URL = "http://api.tvmaze.com";
 
 async function getShowsByTerm(term) {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
-  const searchedShowsArr = [];
   const searchTerm = new URLSearchParams({
     q: term
   });
   const response = await fetch(`${TV_MAZE_URL}/search/shows?${searchTerm}`);
   const showsArr = await response.json();
 
-  // TODO: can use .map for this
-  showsArr.map((showObj) => {
+  return showsArr.map((showObj) => {
     const show = showObj.show;
-    searchedShowsArr.push({
+    // can use destructuring instead
+    // const {id, name, summary, image} = show
+    // return { id, name: name, summary, image}
+    return {
       id: show.id,
       name: show.name,
       summary: show.summary,
-      image: show.image === null ? "https://tinyurl.com/tv-missing" : show.image.original
-    });
+      image: show.image === null ? MISSING_IMAGE_LINK : show.image.medium
+    };
   });
-
-  return searchedShowsArr;
-  // Commenting out to test the .map implementation
-  // for (let showObj of showsArr) {
-  //   const show = showObj.show;
-  //   // Standard if conditional check, removing to test ternary
-  //   // if (show.image === null) {
-  //   //   show.image = "https://tinyurl.com/tv-missing";
-  //   // } else {
-  //   //   show.image = show.image.medium;
-  //   // }
-
-  //   searchedShowsArr.push({
-  //     id: show.id,
-  //     name: show.name,
-  //     summary: show.summary,
-  //     // image: show.image,
-  //     image: show.image === null ? "https://tinyurl.com/tv-missing" : show.image.original
-  //   });
 }
-// }
-
-// Commenting hardcoded default out
-// return [
-//   {
-//     id: 1767,
-//     name: "The Bletchley Circle",
-//     summary:
-//       `<p><b>The Bletchley Circle</b> follows the journey of four ordinary
-//          women with extraordinary skills that helped to end World War II.</p>
-//        <p>Set in 1952, Susan, Millie, Lucy and Jean have returned to their
-//          normal lives, modestly setting aside the part they played in
-//          producing crucial intelligence, which helped the Allies to victory
-//          and shortened the war. When Susan discovers a hidden code behind an
-//          unsolved murder she is met by skepticism from the police. She
-//          quickly realises she can only begin to crack the murders and bring
-//          the culprit to justice with her former friends.</p>`,
-//     image:
-//         "http://static.tvmaze.com/uploads/images/medium_portrait/147/369403.jpg"
-//   }
-// ]
-// }
 
 
 /** Given list of shows, create markup for each and append to DOM.
@@ -90,7 +51,7 @@ function displayShows(shows) {
          <div class="media">
            <img
               src=${show.image}
-              alt=${show.name}
+              alt=${show.name} Series Poster
               class="w-25 me-3">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
