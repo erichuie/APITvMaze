@@ -35,15 +35,7 @@ async function getShowsByTerm(term) {
   return searchedShowsArr;
 }
 
-// const showObj = showsArr[0]["show"];
-// console.log("Show object outside return:", showObj);
-// return {
-//   id: showObj.id,
-//   name: showObj.name,
-//   summary: showObj.summary,
-//   image: showObj.image
-// };
-
+// Commenting hardcoded default out
 // return [
 //   {
 //     id: 1767,
