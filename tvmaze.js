@@ -47,7 +47,7 @@ function displayShows(shows) {
          <div class="media">
            <img
               src=${show.image}
-              alt=${show.name} Series Poster
+              alt="${show.name} Series Poster"
               class="w-25 me-3">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
@@ -114,9 +114,6 @@ function displayEpisodes(episodes) {
 
 // add other functions that will be useful / match our structure & design
 
-// TODO: Add a new function that ties together getEpisodesOfShow and displayEpisodes.
-// It should take the showId. Choose a good name for it.
-
 /**
  * Get episodes for a show and display them on the DOM
  * Called in a click handler for the episodes button
@@ -129,8 +126,10 @@ async function getEpisodesAndDisplay(showId) {
   displayEpisodes(episodes);
 }
 
-// TODO: Make sure event handler is attached to something when the DOM initially loads
-// When is the event loaded, and make sure it is on something that exists when searching
+/**
+ * Use "event delegation" to attach a listener to the Episodes button
+ * - using event delegation because the episodes button does not exist on page load
+ */
 
 $showsList.on(
   "click",
