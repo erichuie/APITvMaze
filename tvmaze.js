@@ -1,8 +1,10 @@
 "use strict";
 
 const $showsList = $("#showsList");
+const $episodesList = $("#episodesList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
+
 const TV_MAZE_URL = "http://api.tvmaze.com";
 // TODO: CONSTANT - no image url
 const MISSING_IMAGE_LINK = "https://tinyurl.com/tv-missing";
@@ -91,10 +93,26 @@ $searchForm.on("submit", async function handleSearchForm(evt) {
  *      { id, name, season, number }
  */
 
-// async function getEpisodesOfShow(id) { }
+async function getEpisodesOfShow(id) {
+  const response = await fetch(`${TV_MAZE_URL}/shows/${id}/episodes`);
+  const episodeArr = await response.json();
+
+  return episodeArr.map((episodeObj) => {
+    const {id, name, season, number} = episodeObj;
+    return {
+      id, name, season, number
+    };
+  });
+}
 
 /** Write a clear docstring for this function... */
 
-// function displayEpisodes(episodes) { }
+function displayEpisodes(episodes) {
+  $episodesList.empty();
+  for(const episode of episodes){
+    const $episode = $(`<li>${episode.name} (season${episode.season}, number${episode.number})</li>`);
+    $episodesList.append($episode);
+  }
+}
 
 // add other functions that will be useful / match our structure & design
