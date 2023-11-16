@@ -115,6 +115,7 @@ function displayEpisodes(episodes) {
     const $episode = $(`<li>${episode.name} (season${episode.season}, number${episode.number})</li>`);
     $episodesList.append($episode);
   }
+  //TODO: IS THIS CORRECT HERE?
   $episodesArea.css("display: block");
 }
 
@@ -123,7 +124,25 @@ function displayEpisodes(episodes) {
 // TODO: Add a new function that ties together getEpisodesOfShow and displayEpisodes.
 // It should take the showId. Choose a good name for it.
 
+/**
+ *
+ *
+ */
+
 async function getEpisodesAndDisplay(showId) {
+  console.log("Does this log from getEpisodesAndDisplay?");
   const episodes = await getEpisodesOfShow(showId);
   displayEpisodes(episodes);
 }
+
+// TODO: Make sure event handler is attached to something when the DOM initially loads
+// When is the event loaded, and make sure it is on something that exists when searching
+
+$("button .Show-getEpisodes").on("click", async function handleEpisodesButtonClick(evt) {
+  // .data() for showID and .closest() for Show
+  console.log("Does this reach Show-getEpisodes click event?");
+  $(evt).data("data-show-id").closest(".Show");
+  await getEpisodesAndDisplay(showId);
+});
+
+const $showGetEpisodes = $(".Show-getEpisodes");
