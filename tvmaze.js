@@ -4,9 +4,7 @@ const $showsList = $("#showsList");
 const $episodesList = $("#episodesList");
 const $episodesArea = $("#episodesArea");
 const $searchForm = $("#searchForm");
-
 const TV_MAZE_URL = "http://api.tvmaze.com";
-// TODO: CONSTANT - no image url
 const MISSING_IMAGE_LINK = "https://tinyurl.com/tv-missing";
 
 /** Given a search term, search for tv shows that match that query.
@@ -18,17 +16,14 @@ const MISSING_IMAGE_LINK = "https://tinyurl.com/tv-missing";
 
 async function getShowsByTerm(term) {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
-  const searchTerm = new URLSearchParams({
+  const searchParams = new URLSearchParams({
     q: term
   });
-  const response = await fetch(`${TV_MAZE_URL}/search/shows?${searchTerm}`);
+  const response = await fetch(`${TV_MAZE_URL}/search/shows?${searchParams}`);
   const showsArr = await response.json();
 
   return showsArr.map((showObj) => {
     const show = showObj.show;
-    // can use destructuring instead
-    // const {id, name, summary, image} = show
-    // return { id, name: name, summary, image}
     return {
       id: show.id,
       name: show.name,
@@ -40,7 +35,6 @@ async function getShowsByTerm(term) {
 
 
 /** Given list of shows, create markup for each and append to DOM.
- *
  * A show is {id, name, summary, image}
  * */
 
@@ -67,15 +61,6 @@ function displayShows(shows) {
       `);
     $showsList.append($show);
   }
-  $("button.Show-getEpisodes").on("click", async function handleEpisodesButtonClick(evt) {
-    // .data() for showID and .closest() for Show
-    // console.log("Does this reach Show-getEpisodes click event?");
-    console.log($(evt.target).closest("div.Show"));
-    const closestShowId = $(evt.target).closest("div.Show").data("show-id");
-
-    // console.log("name of show:", show.name, " show id:", closestShowId);
-    await getEpisodesAndDisplay(Number(closestShowId));
-  });
 }
 
 
@@ -124,7 +109,7 @@ function displayEpisodes(episodes) {
     $episodesList.append($episode);
   }
   //TODO: IS THIS CORRECT HERE?
-  $episodesArea.css("display", "block");
+  $episodesArea.show();
 }
 
 // add other functions that will be useful / match our structure & design
@@ -133,12 +118,13 @@ function displayEpisodes(episodes) {
 // It should take the showId. Choose a good name for it.
 
 /**
- *
+ * Get episodes for a show and display them on the DOM
+ * Called in a click handler for the episodes button
  *
  */
 
 async function getEpisodesAndDisplay(showId) {
-  // console.log("Does this log from getEpisodesAndDisplay?");
+  console.log("Does this log from getEpisodesAndDisplay?");
   const episodes = await getEpisodesOfShow(showId);
   displayEpisodes(episodes);
 }
@@ -146,11 +132,21 @@ async function getEpisodesAndDisplay(showId) {
 // TODO: Make sure event handler is attached to something when the DOM initially loads
 // When is the event loaded, and make sure it is on something that exists when searching
 
-  // $("button.Show-getEpisodes").on("click", ".Show-getEpisodes", async function handleEpisodesButtonClick(evt) {
-  //   // .data() for showID and .closest() for Show
-  //   // console.log("Does this reach Show-getEpisodes click event?");
-  //   console.log($(evt.target).closest("div.Show"));
-  //   const closestShowId = $(evt.target).closest("div.Show").data("show-id");
-  //   // console.log("name of show:", show.name, " show id:", closestShowId);
-  //   await getEpisodesAndDisplay(Number(closestShowId));
-  // });
+$showsList.on(
+  "click",
+  ".Show-getEpisodes",
+  async function handleEpisodeClick(evt) {
+    // here's one way to get the ID of the show: search "closest" ancestor
+    // with the class of .Show (which is put onto the enclosing div, which
+    // has the .data-show-id attribute).
+    const showId = Number(
+      $(evt.target).closest(".Show").data("show-id")
+    );
+
+    // here's another way to get the ID of the show: search "closest" ancestor
+    // that has an attribute of 'data-show-id'. This is called an "attribute
+    // selector", and it's part of CSS selectors worth learning.
+    // const showId = $(evt.target).closest("[data-show-id]").data("show-id");
+
+    await getEpisodesAndDisplay(showId);
+  });
