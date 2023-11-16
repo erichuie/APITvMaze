@@ -98,21 +98,32 @@ async function getEpisodesOfShow(id) {
   const episodeArr = await response.json();
 
   return episodeArr.map((episodeObj) => {
-    const {id, name, season, number} = episodeObj;
+    const { id, name, season, number } = episodeObj;
     return {
       id, name, season, number
     };
   });
 }
 
-/** Write a clear docstring for this function... */
+/** Given an array of episodes, create the HTML need to add it to the DOM
+ * An episode is {id, name, season, number}
+ */
 
 function displayEpisodes(episodes) {
   $episodesList.empty();
-  for(const episode of episodes){
+  for (const episode of episodes) {
     const $episode = $(`<li>${episode.name} (season${episode.season}, number${episode.number})</li>`);
     $episodesList.append($episode);
   }
+  $episodesArea.css("display: block");
 }
 
 // add other functions that will be useful / match our structure & design
+
+// TODO: Add a new function that ties together getEpisodesOfShow and displayEpisodes.
+// It should take the showId. Choose a good name for it.
+
+async function getEpisodesAndDisplay(showId) {
+  const episodes = await getEpisodesOfShow(showId);
+  displayEpisodes(episodes);
+}
