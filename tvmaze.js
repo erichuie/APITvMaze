@@ -65,9 +65,17 @@ function displayShows(shows) {
          </div>
        </div>
       `);
-
     $showsList.append($show);
   }
+  $("button.Show-getEpisodes").on("click", async function handleEpisodesButtonClick(evt) {
+    // .data() for showID and .closest() for Show
+    // console.log("Does this reach Show-getEpisodes click event?");
+    console.log($(evt.target).closest("div.Show"));
+    const closestShowId = $(evt.target).closest("div.Show").data("show-id");
+
+    // console.log("name of show:", show.name, " show id:", closestShowId);
+    await getEpisodesAndDisplay(Number(closestShowId));
+  });
 }
 
 
@@ -116,7 +124,7 @@ function displayEpisodes(episodes) {
     $episodesList.append($episode);
   }
   //TODO: IS THIS CORRECT HERE?
-  $episodesArea.css("display: block");
+  $episodesArea.css("display", "block");
 }
 
 // add other functions that will be useful / match our structure & design
@@ -130,7 +138,7 @@ function displayEpisodes(episodes) {
  */
 
 async function getEpisodesAndDisplay(showId) {
-  console.log("Does this log from getEpisodesAndDisplay?");
+  // console.log("Does this log from getEpisodesAndDisplay?");
   const episodes = await getEpisodesOfShow(showId);
   displayEpisodes(episodes);
 }
@@ -138,11 +146,11 @@ async function getEpisodesAndDisplay(showId) {
 // TODO: Make sure event handler is attached to something when the DOM initially loads
 // When is the event loaded, and make sure it is on something that exists when searching
 
-$("button .Show-getEpisodes").on("click", async function handleEpisodesButtonClick(evt) {
-  // .data() for showID and .closest() for Show
-  console.log("Does this reach Show-getEpisodes click event?");
-  $(evt).data("data-show-id").closest(".Show");
-  await getEpisodesAndDisplay(showId);
-});
-
-const $showGetEpisodes = $(".Show-getEpisodes");
+  // $("button.Show-getEpisodes").on("click", ".Show-getEpisodes", async function handleEpisodesButtonClick(evt) {
+  //   // .data() for showID and .closest() for Show
+  //   // console.log("Does this reach Show-getEpisodes click event?");
+  //   console.log($(evt.target).closest("div.Show"));
+  //   const closestShowId = $(evt.target).closest("div.Show").data("show-id");
+  //   // console.log("name of show:", show.name, " show id:", closestShowId);
+  //   await getEpisodesAndDisplay(Number(closestShowId));
+  // });
