@@ -106,10 +106,9 @@ async function getEpisodesOfShow(showId) {
 function displayEpisodes(episodes) {
   $episodesList.empty();
   for (const episode of episodes) {
-    const $episode = $(`<li>${episode.name} (season${episode.season}, number${episode.number})</li>`);
+    const $episode = $(`<li>${episode.name} (Season: ${episode.season}, Episode: ${episode.number})</li>`);
     $episodesList.append($episode);
   }
-  //TODO: IS THIS CORRECT HERE?
   $episodesArea.show();
 }
 
