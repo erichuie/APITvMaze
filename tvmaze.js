@@ -86,16 +86,17 @@ $searchForm.on("submit", async function handleSearchForm(evt) {
  *      { id, name, season, number }
  */
 
-async function getEpisodesOfShow(id) {
-  const response = await fetch(`${TV_MAZE_URL}/shows/${id}/episodes`);
+async function getEpisodesOfShow(showId) {
+  const response = await fetch(`${TV_MAZE_URL}/shows/${showId}/episodes`);
   const episodeArr = await response.json();
 
-  return episodeArr.map((episodeObj) => {
-    const { id, name, season, number } = episodeObj;
-    return {
-      id, name, season, number
-    };
-  });
+  return episodeArr.map((episodeObj) => ({
+    id: episodeObj.id,
+    name: episodeObj.name,
+    season: episodeObj.season,
+    number: episodeObj.number
+
+  }));
 }
 
 /** Given an array of episodes, create the HTML need to add it to the DOM
